@@ -1,211 +1,183 @@
-# CarePoint Hospital Appointment Management System
+# CarePoint - Hospital Appointment Management System
 
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.21-000000?logo=express&logoColor=white)](https://expressjs.com/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-4.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas%20%2F%20Local-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![JWT](https://img.shields.io/badge/Auth-JWT%20%2B%20Bcrypt-FFB13B)](https://jwt.io/)
-[![SDG 3](https://img.shields.io/badge/UN%20SDG-3%20Good%20Health-4C9F38)](https://sdgs.un.org/goals/goal3)
-
-**CarePoint Hospital** is a full-stack MERN application built to streamline hospital appointment bookings, specialist doctor directories, and role-based doctor/patient portals. Aligned with the United Nations Sustainable Development Goal (**SDG 3: Good Health and Well-being**), CarePoint eliminates scheduling bottlenecks, prevents double-booking conflicts, and enables transparency in healthcare consultations.
+**Course Project:** CSE494  
+**Student Name:** A Munwar Basha  
+**Registration Number:** 12314548  
+**Class / Section:** B.Tech CSE (K4P23WS)  
+**Project Guide:** Dr. Manpreet Singh Sehgal  
+**Department:** Discipline of CSE/IT, Lovely Professional University  
+**Academic Alignment:** UN Sustainable Development Goal 3 (Good Health and Well-being)  
 
 ---
 
-## Table of Contents
+## About the Project
 
-- [Key Features](#key-features)
-- [Architecture & Tech Stack](#architecture--tech-stack)
-- [Project Directory Structure](#project-directory-structure)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Environment Variables](#environment-variables)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
-  - [Database Seeding](#database-seeding)
-- [Pre-seeded Demo Accounts](#pre-seeded-demo-accounts)
-- [API Reference](#api-reference)
-  - [Authentication](#authentication-endpoints)
-  - [Doctor Directory](#doctor-directory-endpoints)
-  - [Appointments](#appointment-endpoints)
-  - [Doctor Portal](#doctor-portal-endpoints)
-  - [Patient Portal](#patient-portal-endpoints)
-- [MongoDB Shell (Mongosh) Showcase](#mongodb-shell-mongosh-showcase)
-- [Security & Validation](#security--validation)
-- [Testing & Quality Verification](#testing--quality-verification)
+CarePoint is a full-stack hospital appointment management web application built using the MERN stack (MongoDB, Express.js, React, Node.js). 
+
+In traditional outpatient departments (OPDs), patients often face long waiting times, lack of clarity regarding doctor availability, and scheduling overlaps. CarePoint addresses this by providing an online booking portal where patients can view specialist doctors, check their consultation fees and available time slots, and schedule visits without double-booking conflicts. Doctors also have a dedicated portal to view their daily appointments, update patient statuses, and manage their availability.
 
 ---
 
 ## Key Features
 
-- **🩺 Interactive Doctor Directory**: Live case-insensitive search across doctor names, specializations, and hospital departments. Displays real-time availability status (*Available* vs *Away*), consultation fees in ₹, and selectable time-slot chips.
-- **🔒 Role-Based Access Control (RBAC)**: Secure authentication powered by JSON Web Tokens (JWT) and `bcryptjs` password hashing, segregating access into `patient`, `doctor`, and `admin` portals.
-- **📅 Conflict-Free Booking Engine**: Validates existing bookings to eliminate slot collisions for the same doctor, date, and time.
-- **👨‍⚕️ Doctor Management Portal**: Authenticated doctors can review assigned patient appointments, update appointment status (*Completed*, *Cancelled*, *No-Show*), toggle real-time availability, and update consultation fees.
-- **👤 Patient Dashboard**: Patients can schedule consultations, review upcoming bookings, and cancel appointments with immediate slot release.
-- **📊 Hospital Analytics**: Live dashboard summarizing registered doctors, appointments count, and status distributions.
-- **🌱 Academic SDG 3 Alignment**: Supports raw MongoDB CLI queries and aggregations via `mongosh` for laboratory and academic demonstrations.
+### 1. Patient Portal
+- User registration and login with encrypted passwords.
+- Real-time directory search across doctors by name, medical specialization, or hospital department.
+- Doctor cards showing consultation fees (in ₹), availability indicators (Available vs Away), and available time slots.
+- Conflict-free booking system: prevents booking an appointment if the doctor is already booked for that specific date and time slot.
+- My Appointments page to view booked visits and cancel bookings if necessary.
+
+### 2. Doctor Portal
+- Dedicated login for registered medical staff.
+- Daily appointment dashboard displaying patient details, age, contact number, and reason for consultation.
+- Status management: doctors can mark appointments as **Completed**, **Cancelled**, or **No-Show**.
+- Availability controls: doctors can switch their status between **Available** and **Away / Unavailable**.
+
+### 3. Database & Evaluation
+- MongoDB collections for `users`, `doctors`, and `appointments`.
+- Pre-seeded with 6 specialist doctors and sample patient accounts.
+- Includes standalone MongoDB Shell (`mongosh`) scripts to run CRUD operations and aggregation queries for lab demonstrations.
 
 ---
 
-## Architecture & Tech Stack
+## Tech Stack
 
-```text
-┌────────────────────────────────────────────────────────┐
-│                   React 18 + Vite UI                   │
-│      (Axios, React Router DOM, Custom Context API)     │
-└──────────────────────────┬─────────────────────────────┘
-                           │  HTTP / REST (JSON + JWT)
-┌──────────────────────────▼─────────────────────────────┐
-│                 Node.js + Express API                  │
-│       (JWT Auth Middleware, Controllers, Mongoose)     │
-└──────────────────────────┬─────────────────────────────┘
-                           │  Database Driver
-┌──────────────────────────▼─────────────────────────────┐
-│                 MongoDB (Atlas / Local)                │
-│    (Collections: users, doctors, appointments)         │
-└────────────────────────────────────────────────────────┘
-```
-
-- **Frontend**: React 18, Vite, React Router v6, Axios, Modern CSS3 Responsive Grid.
-- **Backend**: Node.js (ES Modules), Express.js, Mongoose 8, JSONWebToken, Bcrypt.js, Dotenv, CORS.
-- **Database**: MongoDB Atlas or Local Community Server (`hospitalDB`).
+- **Frontend:** React 18, Vite, React Router DOM, Axios, Plain CSS3 (Responsive)
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas / Local MongoDB, Mongoose ODM
+- **Authentication:** JSON Web Tokens (JWT) & bcryptjs for password hashing
+- **Testing & Tools:** mongosh, Nodemon
 
 ---
 
-## Project Directory Structure
+## Project Structure
 
 ```text
 hospital management/
 ├── backend/
 │   ├── config/
-│   │   └── db.js                 # MongoDB connection handler
+│   │   └── db.js                 # Database connection logic
 │   ├── controllers/
-│   │   └── doctorController.js   # Logic for search, register, toggle status
+│   │   └── doctorController.js   # Logic for search, registration, and status toggle
 │   ├── middleware/
-│   │   └── authMiddleware.js     # JWT token verification & role enforcement
+│   │   └── authMiddleware.js     # JWT verification and role authorization
 │   ├── models/
 │   │   ├── Appointment.js        # Appointment schema with compound index
-│   │   ├── Doctor.js             # Doctor schema with bcrypt pre-save hook
-│   │   └── User.js               # User accounts (roles: patient, doctor, admin)
+│   │   ├── Doctor.js             # Doctor schema with password hashing
+│   │   └── User.js               # User accounts (patient and doctor roles)
 │   ├── routes/
-│   │   ├── appointmentRoutes.js  # Public/Admin appointment CRUD
-│   │   ├── authRoutes.js         # Register, Login, Current User profile
-│   │   ├── dashboardRoutes.js    # Metric aggregations
-│   │   ├── doctorPortalRoutes.js # Doctor-specific appointment & schedule management
-│   │   ├── doctorRoutes.js       # Doctor directory and search API
-│   │   └── patientRoutes.js      # Patient-specific appointment booking
+│   │   ├── appointmentRoutes.js  # General appointment endpoints
+│   │   ├── authRoutes.js         # Register, login, and profile
+│   │   ├── dashboardRoutes.js    # Quick stats endpoint
+│   │   ├── doctorPortalRoutes.js # Doctor-specific appointment management
+│   │   ├── doctorRoutes.js       # Doctor search and directory routes
+│   │   └── patientRoutes.js      # Patient appointment routes
 │   ├── scripts/
-│   │   └── seedDoctors.js        # Automated seed script for 6 specialist doctors
-│   ├── .env.example              # Template environment variables
-│   ├── package.json              # Backend dependencies and scripts
-│   ├── server.js                 # Express application entrypoint
-│   └── testEndpoints.js          # Automated backend smoke test suite
+│   │   └── seedDoctors.js        # Script to seed the 6 specialist doctors
+│   ├── .env.example              # Example environment variables
+│   ├── package.json              # Backend dependencies
+│   ├── server.js                 # Express server entry point
+│   └── testEndpoints.js          # API test script
 ├── frontend/
 │   ├── src/
-│   │   ├── components/           # Navbar, Layout, ProtectedRoute, Booking Modal
-│   │   ├── context/              # AuthContext (JWT session state)
+│   │   ├── components/           # Navbar, Layout, ProtectedRoute, Modal
+│   │   ├── context/              # AuthContext for user session
 │   │   ├── pages/                # Auth, Doctors, PatientDashboard, DoctorDashboard
-│   │   ├── services/             # Axios API client with bearer token interceptor
-│   │   ├── App.jsx               # Role-based route declarations
-│   │   ├── main.jsx              # Application bootstrap
-│   │   └── styles.css            # Application-wide styling
-│   ├── index.html                # HTML entry template
-│   ├── package.json              # Frontend dependencies and build scripts
-│   └── vite.config.js            # Vite configuration
+│   │   ├── services/             # Axios instance
+│   │   ├── App.jsx               # Main routing file
+│   │   ├── main.jsx              # Entry point
+│   │   └── styles.css            # Stylesheet
+│   ├── index.html
+│   ├── package.json              # Frontend dependencies
+│   └── vite.config.js
 ├── mongosh/
-│   ├── setup.js                  # Standalone MongoDB collection initialization
-│   └── operations.js             # Raw mongosh queries, counts, and aggregations
-├── CarePoint_Hospital_Project_Report.docx # Academic project report
-├── .gitignore                    # Git exclusions (.env, node_modules, dist)
-└── README.md                     # Project documentation
+│   ├── setup.js                  # Initial collection creation script
+│   └── operations.js             # Sample queries and aggregation pipeline
+├── CarePoint_Hospital_Project_Report.docx
+└── README.md
 ```
 
 ---
 
-## Getting Started
+## How to Set Up and Run Locally
 
 ### Prerequisites
-
-- **Node.js** (v18.0.0 or higher)
-- **npm** (v9.0.0 or higher)
-- **MongoDB**: A running local instance (`mongodb://127.0.0.1:27017/hospitalDB`) or a free [MongoDB Atlas Cluster](https://www.mongodb.com/atlas).
-- *(Optional)* **mongosh** CLI installed on your PATH for database shell demonstrations.
+- Node.js (v18 or higher installed)
+- MongoDB installed locally OR a MongoDB Atlas connection string
 
 ---
 
-### Environment Variables
+### Step 1: Backend Setup
 
-Navigate to the `backend/` directory, duplicate `.env.example`, and rename it to `.env`:
-
-```bash
-cd backend
-copy .env.example .env    # On Windows
-# cp .env.example .env    # On macOS / Linux
-```
-
-Ensure your `backend/.env` file contains:
-
-```env
-PORT=5000
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/hospitalDB
-JWT_SECRET=carepoint_hospital_jwt_secret_key_2026
-```
-
-> **Security Note**: Never commit your `.env` file with live database credentials to public version control. It is protected by `.gitignore`.
-
----
-
-### Backend Setup
-
-1. Open your terminal in the `backend/` folder:
+1. Open terminal and navigate to the `backend` folder:
    ```bash
    cd backend
+   ```
+
+2. Install dependencies:
+   ```bash
    npm install
    ```
-2. Start the backend development server with hot-reload:
+
+3. Create the `.env` file from the example:
+   - On Windows:
+     ```bash
+     copy .env.example .env
+     ```
+   - On macOS/Linux:
+     ```bash
+     cp .env.example .env
+     ```
+
+4. Open `.env` and verify your MongoDB URI:
+   ```env
+   PORT=5000
+   MONGODB_URI=mongodb://127.0.0.1:27017/hospitalDB
+   JWT_SECRET=carepoint_hospital_jwt_secret_key_2026
+   ```
+   *(If using MongoDB Atlas, replace `MONGODB_URI` with your Atlas connection string).*
+
+5. Populate the database with the sample doctors and users:
+   ```bash
+   npm run seed
+   ```
+
+6. Start the backend server:
    ```bash
    npm run dev
    ```
-   The API will start running at: `http://localhost:5000`
+   The backend will start running on `http://localhost:5000`.
 
 ---
 
-### Frontend Setup
+### Step 2: Frontend Setup
 
-1. Open a second terminal window in the `frontend/` folder:
+1. Open a new terminal window and navigate to `frontend`:
    ```bash
    cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
    npm install
    ```
-2. Launch the Vite development server:
+
+3. Start the Vite development server:
    ```bash
    npm run dev
    ```
-3. Open your browser and visit: `http://localhost:5173`
+
+4. Open `http://localhost:5173` in your browser.
 
 ---
 
-### Database Seeding
+## Test Login Credentials
 
-To automatically populate the **6 specialist doctors** and the **test patient** account, run the seed script:
+You can test both Doctor and Patient accounts using these pre-seeded credentials:
 
-```bash
-cd backend
-npm run seed
-```
+### Doctors List (Password for all doctors: `123456789`)
 
-This ensures the doctors are indexed in MongoDB with pre-hashed passwords, full departments, consultation fees, and available time slots.
-
----
-
-## Pre-seeded Demo Accounts
-
-Use these pre-configured credentials to immediately log in and explore different portal perspectives:
-
-### 🩺 Specialist Doctors (Password for all: `123456789`)
-
-| Doctor Name | Email / Login | Password | Specialization | Department | Fee |
+| Doctor Name | Email (Username) | Password | Specialization | Department | Consultation Fee |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Dr. Ravi Kumar** | `doctor@carepoint.com` | `123456789` | Cardiology | Cardiology | ₹550 |
 | **Dr. Anil Mehta** | `anil.mehta@carepoint.com` | `123456789` | Pediatrics | Child Care | ₹350 |
@@ -214,144 +186,92 @@ Use these pre-configured credentials to immediately log in and explore different
 | **Dr. Neha Gupta** | `neha.gupta@carepoint.com` | `123456789` | Neurology | Neurology | ₹650 |
 | **Dr. Priya Sharma** | `priya.sharma@carepoint.com` | `123456789` | Dermatology | Dermatology | ₹400 |
 
-### 👤 Patient Account
+### Patient Account
 
-| Role | Email / Login | Password | Notes |
+| Role | Email (Username) | Password | Notes |
 | :--- | :--- | :--- | :--- |
-| **Patient** | `patient@carepoint.com` | `Patient123!` | Test patient with pre-scheduled appointment records |
+| **Patient** | `patient@carepoint.com` | `Patient123!` | Test patient with sample appointment history |
 
-*(You can also click the quick **"⚡ Need test shortcuts? Click here"** dropdown on the `/login` screen to one-click autofill and sign in).*
+*(Note: On the login page, you can also click the quick test shortcut to autofill and test immediately).*
 
 ---
 
-## API Reference
+## API Endpoints Summary
 
-### Authentication Endpoints
-Base URL: `/api/auth`
+### Authentication (`/api/auth`)
+- `POST /api/auth/register` - Register a new patient or doctor account
+- `POST /api/auth/login` - Login with email and password (returns JWT token)
+- `GET /api/auth/me` - Fetch profile of logged-in user
 
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/register` | Public | Register a new patient or doctor account |
-| `POST` | `/login` | Public | Authenticate with email/password; returns JWT token & user profile |
-| `GET` | `/me` | Authenticated | Retrieve current session user information |
+### Doctors (`/api/doctors`)
+- `GET /api/doctors` - Get all doctors (supports query search: `?search=cardio`)
+- `GET /api/doctors/:id` - Get specific doctor details
+- `POST /api/doctors/register` - Add a new doctor
+- `PATCH /api/doctors/:id/availability` - Toggle doctor availability status
 
----
+### Patient Routes (`/api/patient`)
+- `GET /api/patient/appointments` - Get list of appointments for logged-in patient
+- `POST /api/patient/appointments` - Book appointment with selected doctor
+- `PATCH /api/patient/appointments/:id/cancel` - Cancel a booked appointment
 
-### Doctor Directory Endpoints
-Base URL: `/api/doctors`
-
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/?search=...` | Public | Fetch all doctors. Supports case-insensitive search by name, specialty, or dept |
-| `GET` | `/:id` | Public | Fetch individual doctor profile by MongoDB ObjectId |
-| `POST` | `/register` | Public / Admin | Register a new doctor profile with working hours, slots, and fee |
-| `PATCH` | `/:id/availability` | Doctor / Admin | Toggle doctor availability (`isAvailable: true/false`) |
-| `PUT` | `/:id` | Admin | Update doctor details |
-| `DELETE` | `/:id` | Admin | Remove doctor from hospital directory |
-
----
-
-### Appointment Endpoints
-Base URL: `/api/appointments`
-
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/?date=...&status=...` | Authenticated | List all hospital appointments with doctor populate |
-| `POST` | `/` | Authenticated | Schedule a new appointment with slot conflict verification |
-| `PUT` | `/:id` | Authenticated | Update appointment information |
-| `PATCH` | `/:id/cancel` | Authenticated | Cancel appointment and free up the time slot |
+### Doctor Portal Routes (`/api/doctor`)
+- `GET /api/doctor/profile` - View profile of logged-in doctor
+- `GET /api/doctor/appointments` - View all appointments booked with this doctor
+- `PATCH /api/doctor/appointments/:id/status` - Update status (`Completed`, `Cancelled`, `No-Show`)
+- `PATCH /api/doctor/availability` - Update fee, working days, and time slots
 
 ---
 
-### Doctor Portal Endpoints
-Base URL: `/api/doctor` *(Requires `doctor` or `admin` role)*
+## MongoDB Shell (mongosh) Demonstration
 
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/profile` | Doctor | Fetch logged-in doctor's assigned profile and settings |
-| `GET` | `/appointments` | Doctor | Fetch appointments booked specifically with this doctor |
-| `PATCH` | `/appointments/:id/status` | Doctor | Mark appointment as `Completed`, `Cancelled`, or `No-Show` |
-| `PATCH` | `/availability` | Doctor | Update consultation fee, available days, and time slots |
+To demonstrate direct database queries during the lab evaluation:
 
----
-
-### Patient Portal Endpoints
-Base URL: `/api/patient` *(Requires `patient` or `admin` role)*
-
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/appointments` | Patient | Retrieve appointments booked by the logged-in patient |
-| `POST` | `/appointments` | Patient | Book a new consultation with a selected doctor |
-| `PATCH` | `/appointments/:id/cancel` | Patient | Cancel patient's own upcoming appointment |
-
----
-
-## MongoDB Shell (Mongosh) Showcase
-
-For database laboratory demonstrations and academic reviews, raw MongoDB operations can be executed directly using `mongosh`:
-
-1. **Connect to your database:**
+1. Connect to mongosh:
    ```bash
-   mongosh "mongodb://127.0.0.1:27017"
+   mongosh
    use hospitalDB
    ```
 
-2. **Query Doctor Records by Specialization:**
+2. View all doctors:
    ```javascript
-   db.doctors.find({ specialization: "Cardiology" }).pretty();
+   db.doctors.find().pretty()
    ```
 
-3. **Check Total Appointments Count:**
+3. Find doctors by specialization:
    ```javascript
-   db.appointments.countDocuments();
+   db.doctors.find({ specialization: "Cardiology" })
    ```
 
-4. **Aggregate Appointments by Status (SDG Metric):**
+4. Count total booked appointments:
+   ```javascript
+   db.appointments.countDocuments()
+   ```
+
+5. Group appointments by status (Aggregation):
    ```javascript
    db.appointments.aggregate([
-     { $group: { _id: "$status", total: { $sum: 1 } } },
-     { $sort: { total: -1 } }
-   ]);
+     { $group: { _id: "$status", total: { $sum: 1 } } }
+   ])
    ```
 
-5. **Run the Full Mongosh Demonstration Script:**
-   ```bash
-   mongosh "mongodb://127.0.0.1:27017" mongosh/operations.js
-   ```
+You can also run the complete script in one command:
+```bash
+mongosh "mongodb://127.0.0.1:27017" mongosh/operations.js
+```
 
 ---
 
-## Security & Validation
+## Verification & Testing
 
-- **Password Cryptography**: Passwords are never stored in plaintext. They are salted and hashed using `bcryptjs` with 10 rounds of hashing.
-- **Data Protection**: Mongoose models sanitize data (`select: false` on password fields) to prevent password leakage in API responses.
-- **Double-Booking Prevention**: Database-level queries ensure no two active appointments share the same `doctorId`, `appointmentDate`, and `appointmentTime`.
-- **JWT Authorization**: All private portal endpoints verify incoming Bearer tokens using HTTP 401 (Unauthorized) and HTTP 403 (Forbidden) status handlers.
-
----
-
-## Testing & Quality Verification
-
-The repository includes an automated smoke test suite to verify all critical authentication and role-based permissions:
+To run the automated backend test script that checks login, authorization, and route protection:
 
 ```bash
 cd backend
 npm run test:api
 ```
 
-### Test Coverage Highlights:
-- ✅ Patient login & JWT generation
-- ✅ Doctor login & JWT generation
-- ✅ Patient appointment retrieval
-- ✅ Doctor portal appointment isolation
-- ✅ Doctor availability toggle
-- ✅ Security check: Patient blocked with HTTP 403 from doctor-only endpoints
-- ✅ Security check: Doctor blocked with HTTP 403 from patient-only endpoints
-
 ---
 
-## Authors & Acknowledgments
+## Declaration
 
-- **Developed by**: A. Munwar Basha
-- **Academic Focus**: SDG 3 (Good Health and Well-being) Hospital Automation
-- **GitHub Repository**: [https://github.com/munwarbasha98/Hospital-Managemtn-System.git](https://github.com/munwarbasha98/Hospital-Managemtn-System.git)
+This project is developed for academic evaluation in course CSE494 at Lovely Professional University. All medical details, doctor names, and appointments used are for demonstration and testing purposes only.
