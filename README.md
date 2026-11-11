@@ -1,15 +1,5 @@
 # CarePoint - Hospital Appointment Management System
 
-**Course Project:** CSE494  
-**Student Name:** A Munwar Basha  
-**Registration Number:** 12314548  
-**Class / Section:** B.Tech CSE (K4P23WS)  
-**Project Guide:** Dr. Manpreet Singh Sehgal  
-**Department:** Discipline of CSE/IT, Lovely Professional University  
-**Academic Alignment:** UN Sustainable Development Goal 3 (Good Health and Well-being)  
-
----
-
 ## About the Project
 
 CarePoint is a full-stack hospital appointment management web application built using the MERN stack (MongoDB, Express.js, React, Node.js). 
